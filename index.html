@@ -3,131 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <title>TF2 Servers</title>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #111;
-            color: #eee;
-            margin: 0;
-        }
-        header {
-            background: #222;
-            padding: 15px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
-        .tabs {
-            display: flex;
-            background: #181818;
-        }
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            background: #181818;
-            border-bottom: 3px solid #181818;
-            transition: 0.3s;
-        }
-        .tab:hover {
-            background: #202020;
-        }
-        .active {
-            border-bottom: 3px solid #4caf50;
-        }
-        .content {
-            padding: 20px;
-            display: none;
-        }
-        .visible {
-            display: block;
-        }
-        .server-box {
-            background: #1b1b1b;
-            padding: 15px;
-            border-radius: 6px;
-            max-width: 400px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 14px;
-            background: #4caf50;
-            color: #fff;
-            border-radius: 6px;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background: #45a049;
-        }
-        a {
-            color: #4caf50;
-        }
+        body { background-color: #0f0f0f; }
     </style>
 </head>
-<body>
-<header>TF2 Server Hub</header>
+<body class="text-gray-100">
 
-<div class="tabs">
-    <div class="tab active" onclick="openTab(0)">TF2 (PC)</div>
-    <div class="tab" onclick="openTab(1)">TF2 (Xenia Netplay)</div>
-    <div class="tab" onclick="openTab(2)">TF2 (Xenia Custom Server)</div>
+<header class="bg-gray-900 py-5 text-center text-3xl font-bold shadow-lg">
+    TF2 Server Hub
+</header>
+
+<!-- Tabs -->
+<div class="flex bg-gray-800 text-gray-300 text-lg">
+    <button class="tab px-6 py-3 w-1/3 text-center border-b-4 border-green-500 font-semibold"
+            onclick="openTab(0)">TF2 (PC)</button>
+
+    <button class="tab px-6 py-3 w-1/3 text-center border-b-4 border-transparent hover:border-gray-600"
+            onclick="openTab(1)">TF2 (Xenia Netplay)</button>
+
+    <button class="tab px-6 py-3 w-1/3 text-center border-b-4 border-transparent hover:border-gray-600"
+            onclick="openTab(2)">TF2 (Custom Xenia Server)</button>
 </div>
 
-<!-- PC SERVER -->
-<div class="content visible">
-    <h2>TF2 (PC) Server</h2>
-    <div class="server-box">
-        <p><b>Address:</b> 89.35.130.12:25812</p>
-        <a class="btn" href="steam://connect/89.35.130.12:25812">Connect</a>
-    </div>
-</div>
+<!-- CONTENT -->
+<div class="p-6">
 
-<!-- XENIA NORMAL NETPLAY -->
-<div class="content">
-    <h2>TF2 (Xenia Netplay)</h2>
-    <p>To join the Netplay lobby:</p>
-    <ul>
-        <li>Open The Orange Box inside Xenia.</li>
-        <li>Find a player named <b>davuksss</b> in the Netplay menu.</li>
-        <li>Join their lobby.</li>
-    </ul>
-</div>
+    <!-- PC SERVER -->
+    <section class="content">
+        <h2 class="text-2xl font-bold mb-4">TF2 (PC) Server</h2>
 
-<!-- XENIA CUSTOM SERVER -->
-<div class="content">
-    <h2>TF2 (Xenia Custom Server Netplay)</h2>
-    <p>Follow these steps to join the custom server:</p>
+        <div class="bg-gray-900 rounded-lg p-5 max-w-md shadow-xl">
+            <p class="text-lg mb-2"><b>Address:</b> 89.35.130.12:25812</p>
 
-    <ol>
-        <li>Download the custom configuration file:</li>
-    </ol>
+            <!-- SERVER STATUS -->
+            <p id="pc-status" class="mb-4 text-yellow-400">Checking server status...</p>
 
-    <a class="btn" href="http://185.176.94.0:2121/uploads/xenia-canary-netplay.config.toml" download>
-        Download Config
-    </a>
+            <!-- Connect Button -->
+            <a id="connect-btn"
+               class="px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 block text-center transition">
+                Connect
+            </a>
 
-    <ol start="2">
-        <li>Replace the original <code>xenia-canary-netplay.config.toml</code> in your Xenia folder.</li>
-        <li>Open Xenia and go to <b>Netplay</b>.</li>
-        <li>Set API Address to:<br>
-            <b>https://xenia-webservices-6cww.onrender.com/</b>
-        </li>
-    </ol>
+            <!-- TF2 NOT INSTALLED -->
+            <p id="tf2-warning" class="text-red-400 mt-3 hidden">
+                TF2 not installed on this PC.
+            </p>
+        </div>
+    </section>
+
+    <!-- XENIA NORMAL -->
+    <section class="content hidden">
+        <h2 class="text-2xl font-bold mb-4">TF2 (Xenia Netplay)</h2>
+        <ul class="list-disc list-inside space-y-2 text-gray-300">
+            <li>Open The Orange Box inside Xenia.</li>
+            <li>Find the player <b>davuksss</b> in the Netplay menu.</li>
+            <li>Join their lobby.</li>
+        </ul>
+    </section>
+
+    <!-- CUSTOM XENIA -->
+    <section class="content hidden">
+        <h2 class="text-2xl font-bold mb-4">TF2 (Xenia Custom Server Netplay)</h2>
+
+        <p class="mb-2">Steps:</p>
+
+        <ol class="list-decimal list-inside mb-4 space-y-1">
+            <li>Download the custom config:</li>
+        </ol>
+
+        <a class="px-4 py-2 rounded-md bg-green-600 hover:bg-green-700 inline-block transition"
+           href="http://185.176.94.0:2121/uploads/xenia-canary-netplay.config.toml" download>
+            Download Config
+        </a>
+
+        <ol start="2" class="list-decimal list-inside mt-4 space-y-1">
+            <li>Replace the default <code>xenia-canary-netplay.config.toml</code>.</li>
+            <li>Open Xenia → Netplay menu.</li>
+            <li>Set API Address to:<br>
+                <b>https://xenia-webservices-6cww.onrender.com/</b></li>
+        </ol>
+
+        <p id="custom-api-status" class="mt-4 text-yellow-400">
+            Checking API server status...
+        </p>
+
+    </section>
+
 </div>
 
 <script>
-    function openTab(index) {
-        let tabs = document.querySelectorAll('.tab');
-        let contents = document.querySelectorAll('.content');
-
-        tabs.forEach(t => t.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('visible'));
-
-        tabs[index].classList.add('active');
-        contents[index].classList.add('visible');
+    /* TAB SWITCHER */
+    function openTab(i) {
+        document.querySelectorAll(".tab").forEach((t, idx) => {
+            t.classList.remove("border-green-500");
+            t.classList.add("border-transparent");
+            if (idx === i) t.classList.add("border-green-500");
+        });
+        document.querySelectorAll(".content").forEach((c, idx) => {
+            c.classList.toggle("hidden", idx !== i);
+        });
     }
+
+    /* STEAM GAME DETECT */
+    async function checkTF2Installed() {
+        const steamProtocol = "steam://rungameid/440";
+
+        // Browser cannot detect Steam directly, but we can test protocol handler
+        let isInstalled = false;
+
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+
+        try {
+            iframe.contentWindow.location.href = steamProtocol;
+            isInstalled = true;
+        } catch (e) {
+            isInstalled = false;
+        }
+
+        return isInstalled;
+    }
+
+    /* UPDATE CONNECT BUTTON */
+    async function updateSteamStatus() {
+        const installed = await checkTF2Installed();
+
+        const btn = document.getElementById("connect-btn");
+        const warn = document.getElementById("tf2-warning");
+
+        if (installed) {
+            btn.href = "steam://connect/89.35.130.12:25812";
+            warn.classList.add("hidden");
+        } else {
+            btn.classList.add("opacity-40");
+            btn.classList.add("cursor-not-allowed");
+            btn.href = "#";
+            warn.classList.remove("hidden");
+        }
+    }
+
+    /* PC SERVER STATUS CHECK */
+    async function checkPCServer() {
+        const status = document.getElementById("pc-status");
+
+        try {
+            const r = await fetch("https://api.mcstatus.io/v2/status/java/89.35.130.12:25812");
+            status.textContent = r.ok ? "Online" : "Offline";
+            status.className = r.ok ? "text-green-400" : "text-red-400";
+        } catch {
+            status.textContent = "Offline";
+            status.className = "text-red-400";
+        }
+    }
+
+    /* CUSTOM XENIA API STATUS */
+    async function checkCustomAPI() {
+        const elem = document.getElementById("custom-api-status");
+
+        try {
+            const r = await fetch("https://xenia-webservices-6cww.onrender.com/health");
+            elem.textContent = r.ok ? "API Online" : "API Offline";
+            elem.className = r.ok ? "text-green-400" : "text-red-400";
+        } catch {
+            elem.textContent = "API Offline";
+            elem.className = "text-red-400";
+        }
+    }
+
+    updateSteamStatus();
+    checkPCServer();
+    checkCustomAPI();
+
 </script>
 
 </body>
