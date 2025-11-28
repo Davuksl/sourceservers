@@ -39,9 +39,6 @@
         <div class="bg-gray-900 rounded-lg p-5 max-w-md shadow-xl">
             <p class="text-lg mb-2"><b>Address:</b> 89.35.130.12:25812</p>
 
-            <!-- SERVER STATUS -->
-            <p id="pc-status" class="mb-4 text-yellow-400">Checking server status...</p>
-
             <!-- Connect Button -->
             <a id="connect-btn"
                class="px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 block text-center transition">
@@ -87,10 +84,6 @@
                 <b>https://xenia-webservices-6cww.onrender.com/</b></li>
         </ol>
 
-        <p id="custom-api-status" class="mt-4 text-yellow-400">
-            Checking API server status...
-        </p>
-
     </section>
 
 </div>
@@ -112,7 +105,6 @@
     async function checkTF2Installed() {
         const steamProtocol = "steam://rungameid/440";
 
-        // Browser cannot detect Steam directly, but we can test protocol handler
         let isInstalled = false;
 
         const iframe = document.createElement("iframe");
@@ -147,38 +139,7 @@
         }
     }
 
-    /* PC SERVER STATUS CHECK */
-    async function checkPCServer() {
-        const status = document.getElementById("pc-status");
-
-        try {
-            const r = await fetch("https://api.mcstatus.io/v2/status/java/89.35.130.12:25812");
-            status.textContent = r.ok ? "Online" : "Offline";
-            status.className = r.ok ? "text-green-400" : "text-red-400";
-        } catch {
-            status.textContent = "Offline";
-            status.className = "text-red-400";
-        }
-    }
-
-    /* CUSTOM XENIA API STATUS */
-    async function checkCustomAPI() {
-        const elem = document.getElementById("custom-api-status");
-
-        try {
-            const r = await fetch("https://xenia-webservices-6cww.onrender.com/health");
-            elem.textContent = r.ok ? "API Online" : "API Offline";
-            elem.className = r.ok ? "text-green-400" : "text-red-400";
-        } catch {
-            elem.textContent = "API Offline";
-            elem.className = "text-red-400";
-        }
-    }
-
     updateSteamStatus();
-    checkPCServer();
-    checkCustomAPI();
-
 </script>
 
 </body>
