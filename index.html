@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TF2 Servers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+            margin: 0;
+        }
+        header {
+            background: #222;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .tabs {
+            display: flex;
+            background: #181818;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            background: #181818;
+            border-bottom: 3px solid #181818;
+            transition: 0.3s;
+        }
+        .tab:hover {
+            background: #202020;
+        }
+        .active {
+            border-bottom: 3px solid #4caf50;
+        }
+        .content {
+            padding: 20px;
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
+        .server-box {
+            background: #1b1b1b;
+            padding: 15px;
+            border-radius: 6px;
+            max-width: 400px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            background: #4caf50;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        a {
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+<header>TF2 Server Hub</header>
+
+<div class="tabs">
+    <div class="tab active" onclick="openTab(0)">TF2 (PC)</div>
+    <div class="tab" onclick="openTab(1)">TF2 (Xenia Netplay)</div>
+    <div class="tab" onclick="openTab(2)">TF2 (Xenia Custom Server)</div>
+</div>
+
+<!-- PC SERVER -->
+<div class="content visible">
+    <h2>TF2 (PC) Server</h2>
+    <div class="server-box">
+        <p><b>Address:</b> 89.35.130.12:25812</p>
+        <a class="btn" href="steam://connect/89.35.130.12:25812">Connect</a>
+    </div>
+</div>
+
+<!-- XENIA NORMAL NETPLAY -->
+<div class="content">
+    <h2>TF2 (Xenia Netplay)</h2>
+    <p>To join the Netplay lobby:</p>
+    <ul>
+        <li>Open The Orange Box inside Xenia.</li>
+        <li>Find a player named <b>davuksss</b> in the Netplay menu.</li>
+        <li>Join their lobby.</li>
+    </ul>
+</div>
+
+<!-- XENIA CUSTOM SERVER -->
+<div class="content">
+    <h2>TF2 (Xenia Custom Server Netplay)</h2>
+    <p>Follow these steps to join the custom server:</p>
+
+    <ol>
+        <li>Download the custom configuration file:</li>
+    </ol>
+
+    <a class="btn" href="http://185.176.94.0:2121/uploads/xenia-canary-netplay.config.toml" download>
+        Download Config
+    </a>
+
+    <ol start="2">
+        <li>Replace the original <code>xenia-canary-netplay.config.toml</code> in your Xenia folder.</li>
+        <li>Open Xenia and go to <b>Netplay</b>.</li>
+        <li>Set API Address to:<br>
+            <b>https://xenia-webservices-6cww.onrender.com/</b>
+        </li>
+    </ol>
+</div>
+
+<script>
+    function openTab(index) {
+        let tabs = document.querySelectorAll('.tab');
+        let contents = document.querySelectorAll('.content');
+
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('visible'));
+
+        tabs[index].classList.add('active');
+        contents[index].classList.add('visible');
+    }
+</script>
+
+</body>
+</html>
