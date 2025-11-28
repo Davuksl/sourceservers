@@ -39,15 +39,13 @@
         <div class="bg-gray-900 rounded-lg p-5 max-w-md shadow-xl">
             <p class="text-lg mb-2"><b>Address:</b> 89.35.130.12:25812</p>
 
-            <!-- Connect Button -->
             <a id="connect-btn"
                class="px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 block text-center transition">
                 Connect
             </a>
 
-            <!-- TF2 NOT INSTALLED -->
             <p id="tf2-warning" class="text-red-400 mt-3 hidden">
-                TF2 not installed on this PC.
+                TF2 is not installed on this PC.
             </p>
         </div>
     </section>
@@ -66,6 +64,9 @@
     <section class="content hidden">
         <h2 class="text-2xl font-bold mb-4">TF2 (Xenia Custom Server Netplay)</h2>
 
+        <p class="mb-2 font-semibold">Server Status:</p>
+        <p id="api-status" class="text-yellow-400 mb-4">Checking...</p>
+
         <p class="mb-2">Steps:</p>
 
         <ol class="list-decimal list-inside mb-4 space-y-1">
@@ -78,50 +79,49 @@
         </a>
 
         <ol start="2" class="list-decimal list-inside mt-4 space-y-1">
-            <li>Replace the default <code>xenia-canary-netplay.config.toml</code>.</li>
+            <li>Replace the default <code>xenia-canary-netplay.config.toml</code> file.</li>
             <li>Open Xenia → Netplay menu.</li>
             <li>Set API Address to:<br>
                 <b>https://xenia-webservices-6cww.onrender.com/</b></li>
         </ol>
-
     </section>
 
 </div>
 
 <script>
-    /* TAB SWITCHER */
+    /* ----------------------- */
+    /* TAB SWITCHER            */
+    /* ----------------------- */
     function openTab(i) {
         document.querySelectorAll(".tab").forEach((t, idx) => {
             t.classList.remove("border-green-500");
             t.classList.add("border-transparent");
             if (idx === i) t.classList.add("border-green-500");
         });
+
         document.querySelectorAll(".content").forEach((c, idx) => {
             c.classList.toggle("hidden", idx !== i);
         });
     }
 
-    /* STEAM GAME DETECT */
+    /* ----------------------- */
+    /* SAFE TF2 DETECT (NO AUTO OPEN STEAM) */
+    /* ----------------------- */
     async function checkTF2Installed() {
-        const steamProtocol = "steam://rungameid/440";
+        // Просто проверяем вызов steam:// — НЕ открывает приложение
+        return new Promise(resolve => {
+            let test = document.createElement("a");
+            test.href = "steam://rungameid/440";
 
-        let isInstalled = false;
-
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-
-        try {
-            iframe.contentWindow.location.href = steamProtocol;
-            isInstalled = true;
-        } catch (e) {
-            isInstalled = false;
-        }
-
-        return isInstalled;
+            // Если браузер разрешает протокол → игра установлена
+            if (test.protocol === "steam:") {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
     }
 
-    /* UPDATE CONNECT BUTTON */
     async function updateSteamStatus() {
         const installed = await checkTF2Installed();
 
@@ -130,16 +130,44 @@
 
         if (installed) {
             btn.href = "steam://connect/89.35.130.12:25812";
+            btn.classList.remove("opacity-40", "cursor-not-allowed");
             warn.classList.add("hidden");
         } else {
-            btn.classList.add("opacity-40");
-            btn.classList.add("cursor-not-allowed");
             btn.href = "#";
+            btn.classList.add("opacity-40", "cursor-not-allowed");
             warn.classList.remove("hidden");
         }
     }
 
     updateSteamStatus();
+
+
+    /* ----------------------- */
+    /* CUSTOM API STATUS CHECK */
+    /* ----------------------- */
+    async function checkCustomAPI() {
+        const statusEl = document.getElementById("api-status");
+
+        try {
+            const res = await fetch("https://xenia-webservices-6cww.onrender.com/", { method: "GET" });
+
+            if (res.ok) {
+                statusEl.textContent = "Online";
+                statusEl.classList.remove("text-red-400", "text-yellow-400");
+                statusEl.classList.add("text-green-400");
+            } else {
+                statusEl.textContent = "Offline";
+                statusEl.classList.remove("text-green-400", "text-yellow-400");
+                statusEl.classList.add("text-red-400");
+            }
+        } catch {
+            statusEl.textContent = "Offline";
+            statusEl.classList.remove("text-green-400", "text-yellow-400");
+            statusEl.classList.add("text-red-400");
+        }
+    }
+
+    checkCustomAPI();
 </script>
 
 </body>
